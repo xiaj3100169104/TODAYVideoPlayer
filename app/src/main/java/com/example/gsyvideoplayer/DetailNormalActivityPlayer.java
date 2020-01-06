@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import com.example.gsyvideoplayer.video.LandLayoutVideo;

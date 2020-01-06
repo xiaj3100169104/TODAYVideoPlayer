@@ -25,14 +25,14 @@ import tv.danmaku.ijk.media.player.IjkLibLoader;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
- IJKPLayer
- Created by guoshuyu on 2018/1/11.
+ * IJKPLayer
+ * Created by guoshuyu on 2018/1/11.
  */
 
 public class IjkPlayerManager extends BasePlayerManager {
 
     /**
-     log level
+     * log level
      */
     private static int logLevel = IjkMediaPlayer.IJK_LOG_DEFAULT;
 
@@ -69,9 +69,12 @@ public class IjkPlayerManager extends BasePlayerManager {
             //开启硬解码
             if (GSYVideoType.isMediaCodec()) {
                 Debuger.printfLog("enable mediaCodec");
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+                //以下属性会导致视频黑屏花屏
+                //mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+                //mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+                //mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+                //解决进度拖动SeekTo后不准确
+                mediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
             }
 
             if (gsyModel.isCache() && cacheManager != null) {

@@ -2,14 +2,18 @@ package com.example.gsyvideoplayer;
 
 
 import android.os.Build;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.transition.Explode;
 import android.view.Window;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
+import com.example.gsyvideoplayer.adapter.RecyclerDefaultAdapter;
 import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
 
+import com.example.gsyvideoplayer.holder.RecyclerItemDefaultHolder;
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -19,6 +23,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -30,7 +35,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
 
-    RecyclerBaseAdapter recyclerBaseAdapter;
+    RecyclerDefaultAdapter recyclerBaseAdapter;
 
     List<VideoModel> dataList = new ArrayList<>();
 
@@ -46,13 +51,10 @@ public class RecyclerViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
         ButterKnife.bind(this);
-
-        resolveData();
-
-        final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
-        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerBaseAdapter = new RecyclerDefaultAdapter(this, dataList);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         videoList.setLayoutManager(linearLayoutManager);
-        videoList.setAdapter(recyclerNormalAdapter);
+        videoList.setAdapter(recyclerBaseAdapter);
 
         videoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -66,26 +68,19 @@ public class RecyclerViewActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItem   = linearLayoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                 //大于0说明有播放
-                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
-                    //当前播放的位置
-                    int position = GSYVideoManager.instance().getPlayPosition();
-                    //对应的播放列表TAG
-                    if (GSYVideoManager.instance().getPlayTag().equals(RecyclerItemNormalHolder.TAG)
-                            && (position < firstVisibleItem || position > lastVisibleItem)) {
-
-                        //如果滑出去了上面和下面就是否，和今日头条一样
-                        //是否全屏
-                        if(!GSYVideoManager.isFullState(RecyclerViewActivity.this)) {
-                            GSYVideoManager.releaseAllVideos();
-                            recyclerNormalAdapter.notifyDataSetChanged();
-                        }
-                    }
+                int p = GSYVideoManager.instance().getPlayPosition();
+                if (p >= 0 && (p < firstVisibleItem || p > lastVisibleItem)) {
+                    //可以保存下最近播放的两个视频播放进度，以便回看体验更好
+                    GSYVideoManager.releaseAllVideos();
+                    recyclerBaseAdapter.notifyItemChanged(p);
                 }
             }
         });
+
+        resolveData();
 
     }
 
@@ -106,7 +101,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        GSYVideoManager.onResume(false);
+        //GSYVideoManager.onResume(false);
     }
 
     @Override
@@ -117,12 +112,25 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
 
     private void resolveData() {
+        String face = "http://test-assets.wujinpu.cn/goods/goodsInfoImg/1a8e3067505640458199991ead4ee66e/4811568189101270.jpg?x-oss-process=style/280";
+        String url = "https://res.exexm.com/cw_145225549855002";
+        String title = "这是title";
+        String url2 = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        String title2 = "哦？Title？";
+
         for (int i = 0; i < 19; i++) {
-            VideoModel videoModel = new VideoModel();
-            dataList.add(videoModel);
+            VideoModel v = new VideoModel();
+            v.videoPicUrl = face;
+            if (i % 2 == 0) {
+                v.videoUrl = url;
+                v.title = title;
+            } else {
+                v.videoUrl = url2;
+                v.title = title2;
+            }
+            dataList.add(v);
         }
-        if (recyclerBaseAdapter != null)
-            recyclerBaseAdapter.notifyDataSetChanged();
+        recyclerBaseAdapter.notifyDataSetChanged();
     }
 
 }

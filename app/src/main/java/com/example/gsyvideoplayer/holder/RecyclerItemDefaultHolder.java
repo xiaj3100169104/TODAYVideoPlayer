@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.video.SampleCoverVideo;
@@ -28,38 +26,32 @@ import butterknife.ButterKnife;
  * Created by guoshuyu on 2017/1/9.
  */
 
-public class RecyclerItemNormalHolder extends RecyclerView.ViewHolder {
+public class RecyclerItemDefaultHolder extends RecyclerView.ViewHolder {
 
-    public final static String TAG = "RecyclerView2List";
-
-    protected Context context = null;
+    protected Context context;
 
     @BindView(R.id.video_item_player)
-    SampleCoverVideo gsyVideoPlayer;
+    StandardGSYVideoPlayer gsyVideoPlayer;
+    private ImageView faceView;
 
     GSYVideoOptionBuilder gsyVideoOptionBuilder;
 
-    public RecyclerItemNormalHolder(Context context, View v) {
+    public RecyclerItemDefaultHolder(Context context, View v) {
         super(v);
         this.context = context;
         ButterKnife.bind(this, v);
+        faceView = new ImageView(context);
+        faceView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
     }
 
-    public void onBind(final int position, VideoModel videoModel) {
-        String url2 = "http://test-assets.wujinpu.cn/goods/goodsInfoImg/1a8e3067505640458199991ead4ee66e/4811568189101270.jpg?x-oss-process=style/280";
-        gsyVideoPlayer.loadCoverImage(url2, R.mipmap.ic_launcher);
-        String url;
-        String title;
-        if (position % 2 == 0) {
-            url = "https://res.exexm.com/cw_145225549855002";
-            title = "这是title";
-        } else {
-            url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-            title = "哦？Title？";
+    public void onBind(final int position, VideoModel v) {
+        //增加封面
+        if (faceView.getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) faceView.getParent();
+            viewGroup.removeView(faceView);
         }
-
-
+        Glide.with(context).load(v.videoPicUrl).into(faceView);
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");
 
@@ -67,13 +59,13 @@ public class RecyclerItemNormalHolder extends RecyclerView.ViewHolder {
         //gsyVideoPlayer.initUIState();
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
-                .setUrl(url)
-                .setVideoTitle(title)
+                .setThumbImageView(faceView)
+                .setUrl(v.videoUrl)
+                .setVideoTitle(v.title)
                 .setCacheWithPlay(false)
                 .setAutoFullWithSize(false)
                 .setRotateViewAuto(false)
                 .setLockLand(true)
-                .setPlayTag(TAG)
                 .setMapHeadData(header)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
@@ -84,7 +76,7 @@ public class RecyclerItemNormalHolder extends RecyclerView.ViewHolder {
                         super.onPrepared(url, objects);
                         if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
                             //静音
-                            GSYVideoManager.instance().setNeedMute(true);
+                            //GSYVideoManager.instance().setNeedMute(true);
                         }
 
                     }
@@ -93,24 +85,20 @@ public class RecyclerItemNormalHolder extends RecyclerView.ViewHolder {
                     public void onQuitFullscreen(String url, Object... objects) {
                         super.onQuitFullscreen(url, objects);
                         //全屏不静音
-                        GSYVideoManager.instance().setNeedMute(true);
+                        //GSYVideoManager.instance().setNeedMute(true);
                     }
 
                     @Override
                     public void onEnterFullscreen(String url, Object... objects) {
                         super.onEnterFullscreen(url, objects);
-                        GSYVideoManager.instance().setNeedMute(false);
+                        //GSYVideoManager.instance().setNeedMute(false);
                         gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String)objects[0]);
                     }
                 }).build(gsyVideoPlayer);
-
-
         //增加title
-        gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
-
+        gsyVideoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         //设置返回键
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
-
         //设置全屏按键功能
         gsyVideoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override

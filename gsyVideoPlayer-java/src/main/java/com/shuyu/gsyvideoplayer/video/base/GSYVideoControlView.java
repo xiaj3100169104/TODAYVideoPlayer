@@ -570,6 +570,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser){
+            int time = seekBar.getProgress() * getDuration() / 100;
+            mCurrentTimeTextView.setText(CommonUtil.stringForTime(time));
+        }
     }
 
     @Override

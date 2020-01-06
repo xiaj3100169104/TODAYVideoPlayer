@@ -48,17 +48,13 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     @Override
     protected void init(Context context) {
         super.init(context);
-        mCoverImage = (ImageView) findViewById(R.id.thumbImage);
-
+        mCoverImage = new ImageView(context);
+        mCoverImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        setThumbImageView(mCoverImage);
         if (mThumbImageViewLayout != null &&
                 (mCurrentState == -1 || mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR)) {
             mThumbImageViewLayout.setVisibility(VISIBLE);
         }
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.video_layout_cover;
     }
 
     public void loadCoverImage(String url, int res) {
@@ -79,7 +75,7 @@ public class SampleCoverVideo extends StandardGSYVideoPlayer {
     public GSYBaseVideoPlayer startWindowFullscreen(Context context, boolean actionBar, boolean statusBar) {
         GSYBaseVideoPlayer gsyBaseVideoPlayer = super.startWindowFullscreen(context, actionBar, statusBar);
         SampleCoverVideo sampleCoverVideo = (SampleCoverVideo) gsyBaseVideoPlayer;
-        sampleCoverVideo.loadCoverImage(mCoverOriginUrl, mDefaultRes);
+        //sampleCoverVideo.loadCoverImage(mCoverOriginUrl, mDefaultRes);
         return gsyBaseVideoPlayer;
     }
 

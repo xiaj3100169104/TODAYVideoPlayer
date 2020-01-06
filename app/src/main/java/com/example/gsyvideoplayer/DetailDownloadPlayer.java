@@ -26,7 +26,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.request.RequestCall;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 

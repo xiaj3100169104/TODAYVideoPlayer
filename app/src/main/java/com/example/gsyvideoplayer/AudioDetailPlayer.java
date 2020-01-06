@@ -3,14 +3,12 @@ package com.example.gsyvideoplayer;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import com.example.gsyvideoplayer.video.AudioSampleVideo;
-import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.google.android.exoplayer2.SeekParameters;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;

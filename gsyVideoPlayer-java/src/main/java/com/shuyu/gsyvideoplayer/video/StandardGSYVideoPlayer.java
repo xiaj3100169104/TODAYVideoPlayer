@@ -445,11 +445,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, VISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
         updateStartImage();
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
     }
 
     @Override
@@ -463,13 +459,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
-            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
-                ((ENDownloadView) mLoadingProgressBar).start();
-            }
-        }
     }
 
     @Override
@@ -483,10 +472,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
         updateStartImage();
     }
 
@@ -501,10 +486,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
         updateStartImage();
         updatePauseCover();
     }
@@ -520,13 +501,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
-            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
-                ((ENDownloadView) mLoadingProgressBar).start();
-            }
-        }
     }
 
     @Override
@@ -540,10 +514,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, VISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
         updateStartImage();
     }
 
@@ -558,10 +528,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
         updateStartImage();
     }
 
@@ -665,10 +631,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
     }
 
     protected void changeUiToPlayingClear() {
@@ -694,13 +656,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, VISIBLE);
         setViewShowState(mLockScreen, GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
-            if (enDownloadView.getCurrentState() == ENDownloadView.STATE_PRE) {
-                ((ENDownloadView) mLoadingProgressBar).start();
-            }
-        }
         updateStartImage();
     }
 
@@ -714,10 +669,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
     }
 
     protected void changeUiToCompleteClear() {
@@ -730,10 +681,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mThumbImageViewLayout, VISIBLE);
         setViewShowState(mBottomProgressBar, VISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
         updateStartImage();
     }
 
@@ -741,17 +688,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
      * 定义开始按键显示
      */
     protected void updateStartImage() {
-        if (mStartButton instanceof ENPlayView) {
-            ENPlayView enPlayView = (ENPlayView) mStartButton;
-            enPlayView.setDuration(500);
-            if (mCurrentState == CURRENT_STATE_PLAYING) {
-                enPlayView.play();
-            } else if (mCurrentState == CURRENT_STATE_ERROR) {
-                enPlayView.pause();
-            } else {
-                enPlayView.pause();
-            }
-        } else if (mStartButton instanceof ImageView) {
+        if (mStartButton instanceof ImageView) {
             ImageView imageView = (ImageView) mStartButton;
             if (mCurrentState == CURRENT_STATE_PLAYING) {
                 imageView.setImageResource(R.drawable.video_click_pause_selector);
